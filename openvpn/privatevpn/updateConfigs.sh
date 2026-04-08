@@ -4,7 +4,7 @@ shopt -s globstar
 
 # Link might be updated, originally found on support page:
 # https://privatevpn.com/support/getting-started/miscellaneous/openvpn/openvpn-configurations-files
-PVPN_CONFIGS_URL="https://privatevpn.com/client/PrivateVPN-TUN.zip"
+PVPN_CONFIGS_URL="https://ovpnstorage.privatevpn.com/PrivateVPN-TUN.zip"
 
 # From PrivateVPN support as of 4/11/2020
 KNOWN_DEDICATED_IP_SERVERS_LIST=$(cat <<EOF
@@ -80,7 +80,7 @@ mkdir -p tcp \
 	forwarding
 
 # Download/unpack PrivateVPN configs
-curl -sOJL "$PVPN_CONFIGS_URL"
+curl -kOJL "$PVPN_CONFIGS_URL"
 unzip -qo -d extracted *.zip
 
 # Copy original PrivateVPN configuration files
@@ -89,7 +89,7 @@ find ./extracted -name '*-TUN-443.ovpn' -exec cp {} ./tcp/ \;
 
 # Cleanup original PrivateVPN configs
 rm -f *.zip
-rm -rf extracted
+sudo rm -rf extracted
 
 # Make config names more human-friendly
 for file in **/*.ovpn; do
@@ -158,5 +158,5 @@ ln -sf "./dedicated/US New York 4.ovpn" "new-york-usa-allportfwd.ovpn"
 ln -sf "./dedicated/SE Stockholm.ovpn" "stockholm-sweden-allportfwd.ovpn"
 ln -sf "SE Stockholm.ovpn" "stockholm-sweden.ovpn"
 
-# Create default link matching previous
-ln -sf "SE Stockholm.ovpn" "default.ovpn"
+# Create default link to Switzerland Zurich (responds to ping)
+ln -sf "CH Zurich.ovpn" "default.ovpn"
